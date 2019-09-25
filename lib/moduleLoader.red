@@ -30,6 +30,18 @@ import: function [
         )
         copy fromExportToEnd to end
     ]
+    if any [
+        not value? 'toExport
+        none? toExport
+        empty? exportingVariables
+    ] [
+        print rejoin [
+            "couldn't export anything from " newline 
+            mold inputAsBlock
+        ]
+        quit
+    ]
+
     blockWithoutExport: compose [(toExport) (fromExportToEnd)]
     blockAsObject: context blockWithoutExport
 
