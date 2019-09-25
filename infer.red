@@ -20,16 +20,16 @@ Red [
 do %lib/helpers.red
 moduleLoader: context load %lib/moduleLoader.red
 
+parser: moduleLoader/import %parser.red
+typenameAssigner: moduleLoader/import %typenameAssigner.red
+typeConstraintGenerator: moduleLoader/import %typeConstraintGenerator.red
+unifier: moduleLoader/import %unifier.red
+
 typeInferer: context [
     infer: function [
         code [block!]
         return: [map!] ;"the substitution, mapping from variable name to type"
     ] [
-        parser: moduleLoader/import %parser.red
-        typenameAssigner: moduleLoader/import %typenameAssigner.red
-        typeConstraintGenerator: moduleLoader/import %typeConstraintGenerator.red
-        unifier: moduleLoader/import %unifier.red
-
         ast: parser/parseCode code
         annotatedAST: typenameAssigner/assignTypenames ast
         typeConstraints: typeConstraintGenerator/generateTypeConstrains annotatedAST
