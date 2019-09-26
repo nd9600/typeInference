@@ -2,11 +2,12 @@ Red [
     Title: "Base object"
 ]
 
+; o: make Obj [_type: append self/_type "NewType"]
 Obj: context [
-    type: copy ["Obj"] ; append self/type "NewType"
+    _type: copy ["Obj"]
 	isType: function [
-        type [string!]
+        typeString [string!]
     ] [
-        not none? find self/type type
+        not none? find self/_type typeString
     ]
 ]

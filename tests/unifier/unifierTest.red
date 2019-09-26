@@ -14,11 +14,15 @@ Red [
 do %lib/helpers.red
 do %lib/obj.red
 moduleLoader: context load %lib/moduleLoader.red
-
+geany
 unifier: moduleLoader/import %src/unifier/unifier.red
 
 tests: context [
     testUnifier: function [] [
+        typeConstraints: [
+
+        ]
+        substitution: unifier/solveTypeConstraints typeConstraints
         assert [
             true
         ]
