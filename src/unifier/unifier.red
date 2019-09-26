@@ -9,7 +9,7 @@ Red [
 export [solveTypeConstraints]
 
 solveTypeConstraints: function [
-    "solves a list of                           type constraints, finding the most general unifier"
+    "solves a list of type constraints, finding the most general unifier"
     typeConstraints [block!] "the list of type constraints"
     return: [map!] ;"the substitution, mapping from variable name to type"
 ] [

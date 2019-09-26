@@ -74,10 +74,10 @@ FunctionType: make Type [
     ]
 
     toString: does [
-        either (length? self/argTypes == 1) [
+        either (length? self/argTypes) == 1 [
             rejoin ["(" self/argTypes/1 " -> " self/returnType ")"]
         ] [
-            argsAsString: (f_map lambda [?/toString] self/argTypes)
+            argsAsString: (f_map function [t] [?? t t/toString] self/argTypes)
                 |> lambda [join ? ", "]
             rejoin ["((" argsAsString ") -> " self/returnType ")"]
         ]
