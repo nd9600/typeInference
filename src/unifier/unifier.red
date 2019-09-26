@@ -10,7 +10,7 @@ export [solveTypeConstraints]
 
 solveTypeConstraints: function [
     "solves a list of                           type constraints, finding the most general unifier"
-    typeConstraints [object!] "the list of type constraints"
+    typeConstraints [block!] "the list of type constraints"
     return: [map!] ;"the substitution, mapping from variable name to type"
 ] [
     none   
