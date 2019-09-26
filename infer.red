@@ -18,12 +18,13 @@ Red [
 ]
 
 do %lib/helpers.red
+do %lib/obj.red
 moduleLoader: context load %lib/moduleLoader.red
 
-parser: moduleLoader/import %parser.red
-typenameAssigner: moduleLoader/import %typenameAssigner.red
-typeConstraintGenerator: moduleLoader/import %typeConstraintGenerator.red
-unifier: moduleLoader/import %unifier.red
+parser: moduleLoader/import %src/parser/parser.red
+typenameAssigner: moduleLoader/import %src/typenameAssigner/typenameAssigner.red
+typeConstraintGenerator: moduleLoader/import %src/typeConstraintGenerator/typeConstraintGenerator.red
+unifier: moduleLoader/import %src/unifier/unifier.red
 
 typeInferer: context [
     infer: function [
@@ -35,6 +36,7 @@ typeInferer: context [
         typeConstraints: typeConstraintGenerator/generateTypeConstrains annotatedAST
         substitution: unifier/solveTypeConstraints typeConstraints
         ?? substitution
+        substitution
     ]
 ]
 
