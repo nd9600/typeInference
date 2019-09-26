@@ -14,13 +14,28 @@ Red [
 do %lib/helpers.red
 do %lib/obj.red
 moduleLoader: context load %lib/moduleLoader.red
-geany
+
+do %src/typenameAssigner/types.red
+do %src/typeConstraintGenerator/typeEquations.red
 unifier: moduleLoader/import %src/unifier/unifier.red
 
 tests: context [
-    testUnifier: function [] [
-        typeConstraints: [
+    testUnifier: does [
+        typeConstraints: reduce [
+            make TypeEquation [
+                left: make TypeVar [name: "t1"]
+                right: make FunctionType [
+                    argTypes: [
+                        make TypeVar [name: "t2"]
+                    ]
+                    returnType:  make TypeVar [name: "t3"]
+                ]
+            ]
 
+            make typeEquation [
+                left: make TypeVar [name: "t2"]
+                right: make ConstantType [datatype: integer!]
+            ]
         ]
         substitution: unifier/solveTypeConstraints typeConstraints
         assert [

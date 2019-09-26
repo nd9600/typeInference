@@ -27,6 +27,26 @@ ConstantType: make Type [
     ]
 ]
 
+; represents a symbolic type name like `t1` or `t2`
+TypeVar: make Type [
+    _type: append self/_type "TypeVar"
+
+    name: none
+
+    equalToOtherType: function [
+        otherType [object!] [
+            all [
+                otherType/isType "TypeVar"
+                self/name == otherType/name
+            ]
+        ]
+    ]
+
+    toString: does [
+        self/name
+    ]
+]
+
 ; represents a function that has n arguments and always returns 1 thing
 FunctionType: make Type [
     _type: append self/_type "FunctionType"
@@ -61,25 +81,5 @@ FunctionType: make Type [
                 |> lambda [join ? ", "]
             rejoin ["((" argsAsString ") -> " self/returnType ")"]
         ]
-    ]
-]
-
-; represents a symbolic type name like `t1` or `t2`
-TypeVar: make Type [
-    _type: append self/_type "TypeVar"
-
-    name: none
-
-    equalToOtherType: function [
-        otherType [object!] [
-            all [
-                otherType/isType "TypeVar"
-                self/name == otherType/name
-            ]
-        ]
-    ]
-
-    toString: does [
-        self/name
     ]
 ]
