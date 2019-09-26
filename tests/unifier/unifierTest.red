@@ -32,7 +32,7 @@ tests: context [
                 ]
             ]
 
-            make typeEquation [
+            make TypeEquation [
                 left: make TypeVar [name: "t2"]
                 right: make ConstantType [datatype: integer!]
             ]
