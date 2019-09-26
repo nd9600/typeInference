@@ -14,11 +14,11 @@ ConstantType: make Type [
     datatype: none ; logic! | string! | file! | url! | char! | integer! | float!
 
     equalToOtherType: function [
-        otherType [object!] [
-            all [
-                self/isType "ConstantType"
-                otherType/datatype == otherType/datatype
-            ]
+        otherType [object!]
+    ] [
+        all [
+            self/isType "ConstantType"
+            otherType/datatype == otherType/datatype
         ]
     ]
 
@@ -34,11 +34,11 @@ TypeVar: make Type [
     name: none
 
     equalToOtherType: function [
-        otherType [object!] [
-            all [
-                otherType/isType "TypeVar"
-                self/name == otherType/name
-            ]
+        otherType [object!]
+    ] [
+        all [
+            otherType/isType "TypeVar"
+            self/name == otherType/name
         ]
     ]
 
@@ -56,12 +56,12 @@ FunctionType: make Type [
     returnType: none
 
     equalToOtherType: function [
-        otherType [object!] [
+        otherType [object!]
+    ] [
         if not all [
-                otherType/isType "FunctionType"
-                (length? self/argTypes) == (length? otherType/argTypes)
-                otherType/returnType == self/returnType
-            ]
+            otherType/isType "FunctionType"
+            (length? self/argTypes) == (length? otherType/argTypes)
+            otherType/returnType == self/returnType
         ] [
             return false
         ]
