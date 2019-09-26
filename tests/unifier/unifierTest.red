@@ -25,7 +25,7 @@ tests: context [
             make TypeEquation [
                 left: make TypeVar [name: "t1"]
                 right: make FunctionType [
-                    argTypes: [
+                    argTypes: reduce [                      ;todo: make this with a function instead, so you don't need to 'reduce it
                         make TypeVar [name: "t2"]
                     ]
                     returnType: make TypeVar [name: "t3"]
@@ -37,7 +37,7 @@ tests: context [
                 right: make ConstantType [datatype: integer!]
             ]
         ]
-        probe typeConstraints/1/right/toString
+        print typeConstraints/1/right/toString
         substitution: unifier/solveTypeConstraints typeConstraints
         assert [
             true
