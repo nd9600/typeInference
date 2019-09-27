@@ -77,7 +77,7 @@ FunctionType: make Type [
         either (length? self/argTypes) == 1 [
             rejoin ["(" self/argTypes/1/toString " -> " self/returnType/toString ")"]
         ] [
-            argsAsString: (f_map function [t] [?? t t/toString] self/argTypes)
+            argsAsString: (f_map lambda [?/toString] self/argTypes)
                 |> lambda [join ? ", "]
             rejoin ["((" argsAsString ") -> " self/returnType/toString ")"]
         ]
