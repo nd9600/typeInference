@@ -377,8 +377,17 @@ join: function [
     block [block!]
     sep [string! char!]
 ] [
-    rejoin compose/only flatten 
-        f_map lambda [reduce [? copy (to-string sep)]] block
+    len: length? block 
+    str: copy "" 
+    repeat i len [
+        e: block/:i
+        either not i == len [
+            append str rejoin [e (to-string sep)]
+        ] [
+            append str e
+        ]
+    ]
+    str
 ]
 
 pickProperties: function [
