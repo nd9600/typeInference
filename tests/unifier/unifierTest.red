@@ -21,40 +21,6 @@ unifier: moduleLoader/import %src/unifier/unifier.red
 
 tests: context [
     testSimpleUnification: does [
-        typeConstraints: reduce [
-            make TypeEquation [
-                left: make FunctionType [
-                    argTypes: reduce [
-                        make ConstantType [datatype: string!]
-                        make ConstantType [datatype: integer!]
-                        make FunctionType [
-                            argTypes: reduce [
-                                make ConstantType [datatype: logic!]
-                            ]
-                            returnType: make ConstantType [datatype: integer!]
-                        ]
-                    ]
-                    returnType: make ConstantType [datatype: float!]
-                ]
-                right: make FunctionType [
-                    argTypes: reduce [
-                        make ConstantType [datatype: string!]
-                        make TypeVar [name: "V"]
-                        make TypeVar [name: "X"]
-                    ]
-                    returnType: make ConstantType [datatype: float!]
-                ]
-            ]
-        ]
-
-        print typeConstraints/1/toString
-        substitution: unifier/solveTypeConstraints typeConstraints
-
-        V: select substitution "V"
-        X: select substitution "X"
-        print V/toString
-        print X/toString
-
         integerConstantType: make ConstantType [datatype: integer!]
         boolToIntType: make FunctionType [
             argTypes: reduce [
@@ -62,8 +28,41 @@ tests: context [
             ]
             returnType: make ConstantType [datatype: integer!]
         ]
+        floatConstantType: make ConstantType [datatype: float!]
+
+        typeConstraints: reduce [
+            make TypeEquation [
+                left: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: string!]
+                        integerConstantType
+                        boolToIntType
+                    ]
+                    returnType: make TypeVar [name: "Y"]
+                ]
+                right: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: string!]
+                        make TypeVar [name: "V"]
+                        make TypeVar [name: "X"]
+                    ]
+                    returnType: floatConstantType
+                ]
+            ]
+        ]
+
+        print typeConstraints/1/toString
+        substitution: unifier/solveTypeConstraints typeConstraints
+
+        Y: select substitution "Y"
+        V: select substitution "V"
+        X: select substitution "X"
+        print Y/toString
+        print V/toString
+        print X/toString
 
         assert [
+            Y/equalToOtherType floatConstantType
             V/equalToOtherType integerConstantType
             X/equalToOtherType boolToIntType
         ]
