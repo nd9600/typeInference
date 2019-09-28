@@ -37,7 +37,7 @@ tests: context [
                 right: make ConstantType [datatype: integer!]
             ]
         ]
-        print typeConstraints/1/right/toString
+        print typeConstraints/1/toString
         substitution: unifier/solveTypeConstraints typeConstraints
         assert [
             true

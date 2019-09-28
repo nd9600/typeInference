@@ -23,4 +23,12 @@ TypeEquation: make obj [
     right: none
 
     originalNode: none ; for debugging purposes
+
+    toString: does [
+        either found? originalNode [
+            rejoin [left/toString " :: " right/toString ", from [" mold originalNode "]"]
+        ] [
+            rejoin [left/toString " :: " right/toString]
+        ]
+    ]
 ]
