@@ -17,7 +17,7 @@ ConstantType: make Type [
         otherType [object!]
     ] [
         all [
-            self/isType "ConstantType"
+            otherType/isType "ConstantType"
             otherType/datatype == otherType/datatype
         ]
     ]

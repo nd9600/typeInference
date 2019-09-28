@@ -30,10 +30,6 @@ Returns a substitution (a map of name -> term) that unifies 'x and 'y, or none i
     subst   [map! none!]
     return: [map! none!]
 ] [
-    print ""
-    print rejoin ["x: " x/toString]
-    print rejoin ["y: " y/toString]
-
     case [
         not found? subst [
             none
@@ -56,7 +52,7 @@ Returns a substitution (a map of name -> term) that unifies 'x and 'y, or none i
             ]
             subst: unify x/returnType y/returnType subst
             repeat i (length? x/argTypes) [
-                subst: unify x/argTypes/i y/argTypes/i subst
+                subst: unify x/argTypes/:i y/argTypes/:i subst
             ]
             subst
         ]
