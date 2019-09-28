@@ -156,10 +156,10 @@ tests: context [
         ;     print rejoin [k ": " substitution/:k/toString]
         ; ]
 
-        xInSubstitution: unifier/applySubstitution make TypeVar [name: "W"] substitution
+        wInSubstitution: unifier/applySubstitution make TypeVar [name: "W"] substitution
 
         assert [
-            xInSubstitution/toString == "((float! -> integer!) -> integer!)"
+            wInSubstitution/toString == "((float! -> integer!) -> integer!)"
 
             Y/equalToOtherType make ConstantType [datatype: float!]
             X/equalToOtherType make FunctionType [
