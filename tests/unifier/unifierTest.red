@@ -52,7 +52,6 @@ tests: context [
         ]
 
         substitution: unifier/solveTypeConstraints typeConstraints
-
         Y: select substitution "Y"
         V: select substitution "V"
         X: select substitution "X"
@@ -94,6 +93,80 @@ tests: context [
         substitution: unifier/solveTypeConstraints typeConstraints
         assert [
             not found? substitution
+        ]
+    ]
+
+    testComplicatedUnification: does [
+        typeConstraints: reduce [
+            make TypeEquation [
+                left: make FunctionType [
+                    argTypes: reduce [
+                        make TypeVar [name: "X"]
+                        make FunctionType [
+                            argTypes: reduce [
+                                make TypeVar [name: "X"]
+                            ]
+                            returnType: make ConstantType [datatype: integer!]
+                        ]
+                        make TypeVar [name: "Y"]
+                        make FunctionType [
+                            argTypes: reduce [
+                                make TypeVar [name: "Y"]
+                            ]
+                            returnType: make ConstantType [datatype: integer!]
+                        ]
+                    ]
+                    returnType: make TypeVar [name: "Y"]
+                ]
+                right: make FunctionType [
+                    argTypes: reduce [
+                        make FunctionType [
+                            argTypes: reduce [
+                                make TypeVar [name: "Z"]
+                            ]
+                            returnType: make ConstantType [datatype: integer!]
+                        ]
+                        make TypeVar [name: "W"]
+                        make TypeVar [name: "Z"]
+                        make TypeVar [name: "X"]
+                    ]
+                    returnType: floatConstantType
+                ]
+            ]
+        ]
+
+        substitution: unifier/solveTypeConstraints typeConstraints
+        Y: select substitution "Y"
+        X: select substitution "X"
+        W: select substitution "W"
+        Z: select substitution "Z"
+
+        ; left
+        ; ((X,              (X -> integer!), Y, (Y -> integer!)) -> Y)
+
+        ; right
+        ; (((Z -> integer!), W,              Z, X)               -> float!)
+
+        ; so
+        ; X :: (Z -> integer!) or  (Y -> integer!)
+        ; W :: (X -> integer!)
+        ; Y :: Z or float
+
+        assert [
+            Y/equalToOtherType make ConstantType [datatype: float!]
+            X/equalToOtherType make FunctionType [
+                argTypes: reduce [
+                    make TypeVar [name: "Z"]
+                ]
+                returnType: make ConstantType [datatype: integer!]
+            ]
+            W/equalToOtherType make FunctionType [
+                argTypes: reduce [
+                    make TypeVar [name: "X"]
+                ]
+                returnType: make ConstantType [datatype: integer!]
+            ]
+            Y/equalToOtherType make ConstantType [datatype: float!]
         ]
     ]
 ]
