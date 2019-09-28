@@ -138,9 +138,6 @@ applySubstitution: function [
     type [object!]
     subst [map! none!]
 ] [
-    print ""
-    print rejoin ["type: " type/toString]
-
     case [
         not found? subst [
             none
@@ -149,28 +146,21 @@ applySubstitution: function [
             type
         ]
         type/isType "ConstantType" [
-            print "ConstantType"
             type
         ]
         type/isType "TypeVar" [
             typeInSubstition: select subst type/name
             either found? typeInSubstition [
-                print "found it"
                 applySubstitution typeInSubstition subst
             ] [
-                print "didnt find it"
                 type
             ]
         ]
         type/isType "FunctionType" [
-            print "FunctionType"
-
-            newArgTypes: []
+            newArgTypes: copy []
             foreach arg type/argTypes [
                 newArg: (applySubstitution arg subst)
                 append newArgTypes newArg
-
-                print rejoin ["newArg:" newArg/toString]
             ]
             make FunctionType [
                 argTypes: newArgTypes
@@ -179,7 +169,6 @@ applySubstitution: function [
         ]
 
         true [
-            print "default"
             none
         ]
     ]
