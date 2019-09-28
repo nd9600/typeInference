@@ -20,27 +20,52 @@ do %src/typeConstraintGenerator/typeEquations.red
 unifier: moduleLoader/import %src/unifier/unifier.red
 
 tests: context [
-    testUnifier: does [
+    testSimpleUnification: does [
         typeConstraints: reduce [
             make TypeEquation [
-                left: make TypeVar [name: "t1"]
-                right: make FunctionType [
-                    argTypes: reduce [                      ;todo: make this with a function instead, so you don't need to 'reduce it
-                        make TypeVar [name: "t2"]
+                left: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: string!]
+                        make ConstantType [datatype: integer!]
+                        make FunctionType [
+                            argTypes: reduce [
+                                make ConstantType [datatype: logic!]
+                            ]
+                            returnType: make ConstantType [datatype: integer!]
+                        ]
                     ]
-                    returnType: make TypeVar [name: "t3"]
+                    returnType: make ConstantType [datatype: float!]
+                ]
+                right: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: string!]
+                        make TypeVar [name: "V"]
+                        make TypeVar [name: "X"]
+                    ]
+                    returnType: make ConstantType [datatype: float!]
                 ]
             ]
-
-            make TypeEquation [
-                left: make TypeVar [name: "t2"]
-                right: make ConstantType [datatype: integer!]
-            ]
         ]
+
         print typeConstraints/1/toString
         substitution: unifier/solveTypeConstraints typeConstraints
+
+        V: select substitution "V"
+        X: select substitution "X"
+        print V/toString
+        print X/toString
+
+        integerConstantType: make ConstantType [datatype: integer!]
+        boolToIntType: make FunctionType [
+            argTypes: reduce [
+                make ConstantType [datatype: logic!]
+            ]
+            returnType: make ConstantType [datatype: integer!]
+        ]
+
         assert [
-            true
+            V/equalToOtherType integerConstantType
+            X/equalToOtherType boolToIntType
         ]
     ]
 ]

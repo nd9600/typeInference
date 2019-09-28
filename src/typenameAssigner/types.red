@@ -61,7 +61,7 @@ FunctionType: make Type [
         if not all [
             otherType/isType "FunctionType"
             (length? self/argTypes) == (length? otherType/argTypes)
-            otherType/returnType == self/returnType
+            otherType/returnType/equalToOtherType self/returnType
         ] [
             return false
         ]
