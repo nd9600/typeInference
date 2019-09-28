@@ -13,7 +13,11 @@ solveTypeConstraints: function [
     typeConstraints [block!] "the list of type constraints"
     return: [map!] ;"the substitution, mapping from variable name to type"
 ] [
-    none   
+    substitution: make map! []
+    foreach constraint typeConstraints [
+        substitution: unify constraint/left constraint/right substitution
+    ]
+    substitution
 ]
 
 unify: function [
@@ -26,34 +30,35 @@ Returns a substitution (a map of name -> term) that unifies 'x and 'y, or none i
     subst   [map! none!]
     return: [map! none!]
 ] [
+    print ""
+    print rejoin ["x: " x/toString]
+    print rejoin ["y: " y/toString]
+
     case [
-        subst is none [
+        not found? subst [
             none
         ]
-        x == y [
+        x/equalToOtherType y [
             subst
         ]
-        x is Var [
+        x/isType "TypeVar" [
             unifyVariable x y subst
         ]
-        y is Var [
+        y/isType "TypeVar" [
             unifyVariable y x subst
         ]
         all [
-            x is App
-            y is App
+            x/isType "FunctionType"
+            y/isType "FunctionType"
         ] [
-            either any [
-                x.fname != y.fname
-                (length? x/args) != (length? y/args)
-            ] [
-                none
-            ] [
-                repeat i (length? x/args) [
-                    subst = unify x/args/i y/args/i subst
-                ]
-                subst
+            if (length? x/argTypes) <> (length? y/argTypes) [
+                return none
             ]
+            subst: unify x/returnType y/returnType subst
+            repeat i (length? x/argTypes) [
+                subst: unify x/argTypes/i y/argTypes/i subst
+            ]
+            subst
         ]
         true [
             none
@@ -68,16 +73,19 @@ unifyVariable: function [
     subst [map!]
     return: [map! none!]
 ] [
-    assert v is Var
+    assert [
+        v/isType "TypeVar"
+    ]
+
     case [
-        v/name in subst [
+        found? select subst v/name [
             unify subst(v/name) x subst
         ]
         all [         ; this fixes the "common error" Peter Norvig describes in "Correcting a Widespread Error in Unification Algorithms"
-            x is Var
-            x/name in subst
+            x/isType "TypeVar"
+            found? xInTheSubstitution: select subst x/name
         ] [
-            unify v subst/(x/name) subst
+            unify v xInTheSubstitution subst
         ]
         occursCheck v x subst [
             none
@@ -101,24 +109,26 @@ Variables in 'term are looked up in subst and the check is applied recursively}
     subst [map!]
     return: [logic!]
 ] [
-    assert v is Var
+    assert [
+        v/isType "TypeVar"
+    ]
     case [
-        v == term [
+        v/equalToOtherType term [
             true
         ]
         all [         
-            term is Var
-            term/name in subst
+            term/isType "TypeVar"
+            found? termIsInTheSubstitution: select subst term/name
         ] [
-            occursCheck v subst/(term/name) subst
+            occursCheck v termIsInTheSubstitution subst
         ]
-        term is App [
-            foreach arg term/args [
+        term/isType "FunctionType" [
+            foreach arg term/argTypes [
                 if occursCheck v arg subst [
                     return true
                 ]
-                return false
             ]
+            return false
         ]
         true [
             false
