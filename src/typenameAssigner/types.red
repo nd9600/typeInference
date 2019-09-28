@@ -18,7 +18,7 @@ ConstantType: make Type [
     ] [
         all [
             otherType/isType "ConstantType"
-            otherType/datatype == otherType/datatype
+            self/datatype == otherType/datatype
         ]
     ]
 

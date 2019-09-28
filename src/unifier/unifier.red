@@ -75,7 +75,8 @@ unifyVariable: function [
 
     case [
         found? select subst v/name [
-            unify subst(v/name) x subst
+            vInTheSubstitution: select subst v/name
+            unify vInTheSubstitution x subst
         ]
         all [         ; this fixes the "common error" Peter Norvig describes in "Correcting a Widespread Error in Unification Algorithms"
             x/isType "TypeVar"

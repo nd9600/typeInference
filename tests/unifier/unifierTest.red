@@ -51,20 +51,49 @@ tests: context [
             ]
         ]
 
-        print typeConstraints/1/toString
         substitution: unifier/solveTypeConstraints typeConstraints
 
         Y: select substitution "Y"
         V: select substitution "V"
         X: select substitution "X"
-        print Y/toString
-        print V/toString
-        print X/toString
 
         assert [
             Y/equalToOtherType floatConstantType
             V/equalToOtherType integerConstantType
             X/equalToOtherType boolToIntType
+        ]
+    ]
+
+    testUnificationFailsWithConflictingDefinitions: does [
+        typeConstraints: reduce [
+            make TypeEquation [
+                left: make FunctionType [
+                    argTypes: reduce [
+                        make TypeVar [name: "X"]
+                        make TypeVar [name: "Y"]
+                        make TypeVar [name: "X"]
+                    ]
+                    returnType: make ConstantType [datatype: string!]
+                ]
+                right: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: integer!]
+                        make FunctionType [
+                            argTypes: reduce [
+                                make TypeVar [name: "X"]
+                            ]
+                            returnType: make ConstantType [datatype: string!]
+                        ]
+                        make ConstantType [datatype: string!]
+                    ]
+                    returnType: make ConstantType [datatype: string!]
+                ]
+            ]
+        ]
+
+        substitution: unifier/solveTypeConstraints typeConstraints
+        assert [
+            not found? substitution
         ]
     ]
 ]
