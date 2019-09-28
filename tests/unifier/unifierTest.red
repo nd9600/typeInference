@@ -152,6 +152,14 @@ tests: context [
         ; W :: (X -> integer!)
         ; Y :: Z or float
 
+        foreach k keys-of substitution [
+            print rejoin [k ": " substitution/:k/toString]
+        ]
+
+        xInSubstitution: unifier/applySubstitution make TypeVar [name: "W"] substitution
+        ; prettyPrint xInSubstitution
+        print xInSubstitution/toString
+
         assert [
             Y/equalToOtherType make ConstantType [datatype: float!]
             X/equalToOtherType make FunctionType [

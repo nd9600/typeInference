@@ -6,7 +6,7 @@ Red [
     Link: https://wiki.nd9600.download/type_inference.html#unification
 ]
 
-export [solveTypeConstraints]
+export [solveTypeConstraints applySubstitution]
 
 solveTypeConstraints: function [
     "solves a list of type constraints, finding the most general unifier"
@@ -129,6 +129,58 @@ Variables in 'term are looked up in subst and the check is applied recursively}
         ]
         true [
             false
+        ]
+    ]
+]
+
+applySubstitution: function [
+    "Returns the type, with all variables that are bound in the substitution are replaced, recursively"
+    type [object!]
+    subst [map! none!]
+] [
+    print ""
+    print rejoin ["type: " type/toString]
+
+    case [
+        not found? subst [
+            none
+        ]
+        (length? keys-of subst) == 0 [
+            type
+        ]
+        type/isType "ConstantType" [
+            print "ConstantType"
+            type
+        ]
+        type/isType "TypeVar" [
+            typeInSubstition: select subst type/name
+            either found? typeInSubstition [
+                print "found it"
+                applySubstitution typeInSubstition subst
+            ] [
+                print "didnt find it"
+                type
+            ]
+        ]
+        type/isType "FunctionType" [
+            print "FunctionType"
+
+            newArgTypes: []
+            foreach arg type/argTypes [
+                newArg: (applySubstitution arg subst)
+                append newArgTypes newArg
+
+                print rejoin ["newArg:" newArg/toString]
+            ]
+            make FunctionType [
+                argTypes: newArgTypes
+                returnType: (applySubstitution type/returnType subst)
+            ]
+        ]
+
+        true [
+            print "default"
+            none
         ]
     ]
 ]
