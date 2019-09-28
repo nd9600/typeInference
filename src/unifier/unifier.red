@@ -1,7 +1,32 @@
 Red [
     Title: "Nathan's type constrain unifier"
     Description: {
-        Solve a list of type constraints using the unification algorithm. Returns the substitution, a map! of (variable name to type)
+        Solves a list of type constraints using the unification algorithm. 
+        Returns the substitution, a map! of (variable name to type)
+
+        Usage:
+        ```
+        unifier/solveTypeConstraints reduce [
+            make TypeEquation [
+                left: make FunctionType [
+                    argTypes: reduce [
+                        make TypeVar [name: "A"]
+                    ]
+                    returnType: make ConstantType [datatype: logic!]
+                ]
+                right: make FunctionType [
+                    argTypes: reduce [
+                        make ConstantType [datatype: integer!]
+                    ]
+                    returnType: make TypeVar [name: "B"]
+                ]
+            ]
+        ]
+        ; returns #(
+        ;    B: make ConstantType [datatype: logic!]
+        ;    A: make ConstantType [datatype: integer!]
+        ;)
+        ```
     }
     Link: https://wiki.nd9600.download/type_inference.html#unification
 ]
@@ -120,12 +145,7 @@ Variables in 'term are looked up in subst and the check is applied recursively}
             occursCheck v termIsInTheSubstitution subst
         ]
         term/isType "FunctionType" [
-            foreach arg term/argTypes [
-                if occursCheck v arg subst [
-                    return true
-                ]
-            ]
-            return false
+            isTrueForAny lambda [occursCheck v ? subst] term/argTypes
         ]
         true [
             false
@@ -157,11 +177,7 @@ applySubstitution: function [
             ]
         ]
         type/isType "FunctionType" [
-            newArgTypes: copy []
-            foreach arg type/argTypes [
-                newArg: (applySubstitution arg subst)
-                append newArgTypes newArg
-            ]
+            newArgTypes: f_map lambda [applySubstitution ? subst] type/argTypes
             make FunctionType [
                 argTypes: newArgTypes
                 returnType: (applySubstitution type/returnType subst)

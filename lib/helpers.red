@@ -174,6 +174,32 @@ f_filter: function [
     result
 ]
 
+isTrueForAny: function [
+    "Returns whether (predicate e) is true for any 'e in 'block"
+    predicate  [function!] "the function to use" 
+    block [block!] "the block to map across"
+] [
+    foreach element block [
+        if predicate element [
+            return true
+        ]
+    ]
+    false
+]
+
+isTrueForAll: function [
+    "Returns whether (predicate e) is true for all 'e in 'block"
+    predicate  [function!] "the function to use" 
+    block [block!] "the block to map across"
+] [
+    foreach element block [
+        if not predicate element [
+            return false
+        ]
+    ]
+    true
+]
+
 assert: function [
     "Raises an error if every value in 'conditions doesn't evaluate to true. Enclose variables in brackets to compose them"
     conditions [block!]
