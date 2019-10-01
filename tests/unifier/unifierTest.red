@@ -152,6 +152,42 @@ tests: context [
         ; W :: (X -> integer!)
         ; Y :: Z or float
 
+        assert [
+            W/equalToOtherType make FunctionType [
+                argTypes: reduce [
+                    make TypeVar [name: "X"]
+                ]
+                returnType: make ConstantType [datatype: integer!]
+            ]
+            X/equalToOtherType make FunctionType [
+                argTypes: reduce [
+                    make TypeVar [name: "Z"]
+                ]
+                returnType: make ConstantType [datatype: integer!]
+            ]
+            Y/equalToOtherType make ConstantType [datatype: float!]
+            Z/equalToOtherType make ConstantType [datatype: float!]
+        ]
+    ]
+
+    testAppliesSubstitutionToType: does [
+        substitution: to-map reduce [
+            "W" make FunctionType [
+                argTypes: reduce [
+                    make TypeVar [name: "X"]
+                ]
+                returnType: make ConstantType [datatype: integer!]
+            ]
+            "X" make FunctionType [
+            argTypes: reduce [
+                make TypeVar [name: "Z"]
+            ]
+            returnType: make ConstantType [datatype: integer!]
+        ]
+            "Y" make ConstantType [datatype: float!]
+            "Z" make ConstantType [datatype: float!]
+        ]
+
         ; foreach k keys-of substitution [
         ;     print rejoin [k ": " substitution/:k/toString]
         ; ]
@@ -160,21 +196,6 @@ tests: context [
 
         assert [
             wInSubstitution/toString == "((float! -> integer!) -> integer!)"
-
-            Y/equalToOtherType make ConstantType [datatype: float!]
-            X/equalToOtherType make FunctionType [
-                argTypes: reduce [
-                    make TypeVar [name: "Z"]
-                ]
-                returnType: make ConstantType [datatype: integer!]
-            ]
-            W/equalToOtherType make FunctionType [
-                argTypes: reduce [
-                    make TypeVar [name: "X"]
-                ]
-                returnType: make ConstantType [datatype: integer!]
-            ]
-            Y/equalToOtherType make ConstantType [datatype: float!]
         ]
     ]
 ]
