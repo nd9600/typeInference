@@ -5,11 +5,16 @@ Red [
     }
 ]
 
-export [assignTypenames]
+export typenameAssigner
 
-assignTypenames: function [
-    ast [object!]
-    return: [object!] ;"the annotated AST, where each node has a 'type property"
-] [
-    none
+typenameAssigner: context [
+    annotatedAST: none
+
+    assignTypenames: function [
+        ast [object!]
+        return: [object!] ;"the annotated AST, where each node has a 'type property"
+    ] [
+        self/annotatedAST: none
+        self/annotatedAST
+    ]
 ]

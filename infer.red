@@ -32,11 +32,13 @@ typeInferer: context [
         return: [map!] ;"the substitution, mapping from variable name to type"
     ] [
         ast: parser/parseCode code
-        annotatedAST: typenameAssigner/assignTypenames ast
-        typeConstraints: typeConstraintGenerator/generateTypeConstrains annotatedAST
-        unifier/solveTypeConstraints typeConstraints
 
-        substitution: unifier/substitution
+        annotatedAST: typenameAssigner/assignTypenames ast
+
+        typeConstraints: typeConstraintGenerator/generateTypeConstrains annotatedAST
+
+        substitution: unifier/solveTypeConstraints typeConstraints
+
         ?? substitution
         substitution
     ]

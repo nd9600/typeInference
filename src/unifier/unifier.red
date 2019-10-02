@@ -44,6 +44,7 @@ unifier: context [
             substitution: unify constraint/left constraint/right substitution
         ]
         self/substitution: substitution
+        self/substitution
     ]
 
     unify: function [

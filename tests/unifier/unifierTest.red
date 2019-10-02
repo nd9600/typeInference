@@ -51,10 +51,10 @@ tests: context [
             ]
         ]
 
-        unifier/solveTypeConstraints typeConstraints
-        Y: select unifier/substitution "Y"
-        V: select unifier/substitution "V"
-        X: select unifier/substitution "X"
+        substitution: unifier/solveTypeConstraints typeConstraints
+        Y: select substitution "Y"
+        V: select substitution "V"
+        X: select substitution "X"
 
         assert [
             Y/equalToOtherType floatConstantType
@@ -90,9 +90,9 @@ tests: context [
             ]
         ]
 
-        unifier/solveTypeConstraints typeConstraints
+        substitution: unifier/solveTypeConstraints typeConstraints
         assert [
-            not found? unifier/substitution
+            not found? substitution
         ]
     ]
 
@@ -135,11 +135,11 @@ tests: context [
             ]
         ]
 
-        unifier/solveTypeConstraints typeConstraints
-        Y: select unifier/substitution "Y"
-        X: select unifier/substitution "X"
-        W: select unifier/substitution "W"
-        Z: select unifier/substitution "Z"
+        substitution: unifier/solveTypeConstraints typeConstraints
+        Y: select substitution "Y"
+        X: select substitution "X"
+        W: select substitution "W"
+        Z: select substitution "Z"
 
         ; left
         ; ((X,              (X -> integer!), Y, (Y -> integer!)) -> Y)

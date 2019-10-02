@@ -3,11 +3,16 @@ Red [
     Description: "Parses code into an Abstract Syntax Tree (AST) of sub-expressions"
 ]
 
-export [parseCode]
+export parser
 
-parseCode: function [
-    code [block!]
-    return: [object!] ;"the AST annotated with typenames"
-] [
-    none
+parser: context [
+    ast: none
+
+    parseCode: function [
+        code [block!]
+        return: [object!] ;"the AST"
+    ] [
+        self/ast: none
+        self/ast
+    ]
 ]

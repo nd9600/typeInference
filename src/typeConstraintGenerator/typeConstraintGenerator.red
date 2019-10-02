@@ -10,12 +10,17 @@ Red [
     }
 ]
 
-export [generateTypeConstrains]
+export typeConstraintGenerator
 
-generateTypeConstrains: function [
-    "makes a list of type contraints from an annotated AST"
-    ast [object!] "the AST annotated with typenames"
-    return: [block!] ;"the list of type equations"
-] [
-    none
+typeConstraintGenerator: context [
+    typeConstraints: none
+
+    generateTypeConstrains: function [
+        "makes a list of type contraints from an annotated AST"
+        ast [object!] "the AST annotated with typenames"
+        return: [block!] ;"the list of type equations"
+    ] [
+        self/typeConstraints: none
+        self/typeConstraints
+    ]
 ]
