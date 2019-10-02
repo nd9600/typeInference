@@ -3,10 +3,10 @@ Red [
 ]
 
 Obj: context [
-    type: copy ["Obj"] ; append self/type "NewType"
+    _type: copy ["Obj"] ; append self/_type "NewType"
 	isType: function [
         type [string!]
     ] [
-        not none? find self/type type
+        not none? find self/_type type
     ]
 ]
