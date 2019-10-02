@@ -51,10 +51,10 @@ tests: context [
             ]
         ]
 
-        substitution: unifier/solveTypeConstraints typeConstraints
-        Y: select substitution "Y"
-        V: select substitution "V"
-        X: select substitution "X"
+        unifier/solveTypeConstraints typeConstraints
+        Y: select unifier/substitution "Y"
+        V: select unifier/substitution "V"
+        X: select unifier/substitution "X"
 
         assert [
             Y/equalToOtherType floatConstantType
@@ -90,9 +90,9 @@ tests: context [
             ]
         ]
 
-        substitution: unifier/solveTypeConstraints typeConstraints
+        unifier/solveTypeConstraints typeConstraints
         assert [
-            not found? substitution
+            not found? unifier/substitution
         ]
     ]
 
@@ -135,11 +135,11 @@ tests: context [
             ]
         ]
 
-        substitution: unifier/solveTypeConstraints typeConstraints
-        Y: select substitution "Y"
-        X: select substitution "X"
-        W: select substitution "W"
-        Z: select substitution "Z"
+        unifier/solveTypeConstraints typeConstraints
+        Y: select unifier/substitution "Y"
+        X: select unifier/substitution "X"
+        W: select unifier/substitution "W"
+        Z: select unifier/substitution "Z"
 
         ; left
         ; ((X,              (X -> integer!), Y, (Y -> integer!)) -> Y)
@@ -192,7 +192,8 @@ tests: context [
         ;     print rejoin [k ": " substitution/:k/toString]
         ; ]
 
-        wInSubstitution: unifier/applySubstitution make TypeVar [name: "W"] substitution
+        unifier/substitution: substitution
+        wInSubstitution: unifier/applySubstitution make TypeVar [name: "W"]
 
         assert [
             wInSubstitution/toString == "((float! -> integer!) -> integer!)"

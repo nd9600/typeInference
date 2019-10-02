@@ -34,7 +34,9 @@ typeInferer: context [
         ast: parser/parseCode code
         annotatedAST: typenameAssigner/assignTypenames ast
         typeConstraints: typeConstraintGenerator/generateTypeConstrains annotatedAST
-        substitution: unifier/solveTypeConstraints typeConstraints
+        unifier/solveTypeConstraints typeConstraints
+
+        substitution: unifier/substitution
         ?? substitution
         substitution
     ]
