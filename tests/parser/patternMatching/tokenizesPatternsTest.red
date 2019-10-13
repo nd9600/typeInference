@@ -32,7 +32,7 @@ parser: moduleLoader/import %src/parser/parser.red
 tests: context [
     testTokenizesSimplePattern: does [
         simplePattern: [
-            | [x _: xs] -> x * 2
+            | [x _cons xs] -> x * 2
             | [] -> []
         ]
 
@@ -40,17 +40,49 @@ tests: context [
 
         expectedTokens: reduce [
             VerticalBar 
-                BlockStart Word ListCons Word BlockEnd
+                BlockStart make WordToken [value: 'x] ListCons make WordToken [value: 'xs] BlockEnd
                 Arrow
-                Code
+                make Code [value: [x * 2]]
             VerticalBar 
                 BlockStart BlockEnd
                 Arrow
-                Code
+                make Code [value: [[]]]
         ]
 
+        actualTypes: f_map lambda [last ?/_type] tokens
+        expectedTypes: f_map lambda [last ?/_type] expectedTokens
+
         assert [
-            (tokens) == expectedTokens
+            (actualTypes) == expectedTypes
+            ; (tokens) == expectedTokens
+        ]
+    ]
+
+    testTokenizesPatternsWithWildcard: does [
+        patternWithWildcard: [
+            | [x _cons xs] -> x * 2
+            | _ -> []
+        ]
+
+        tokens: parser/tokenize patternWithWildcard
+
+        expectedTokens: reduce [
+            VerticalBar 
+                BlockStart make WordToken [value: 'x] ListCons make WordToken [value: 'xs] BlockEnd
+                Arrow
+                make Code [value: [x * 2]]
+            VerticalBar 
+                Wildcard
+                Arrow
+                make Code [value: [[]]]
+        ]
+
+        actualTypes: f_map lambda [last ?/_type] tokens
+        expectedTypes: f_map lambda [last ?/_type] expectedTokens
+
+        assert [
+            (actualTypes) == expectedTypes
+            ; (tokens) == expectedTokens
         ]
     ]
 ]

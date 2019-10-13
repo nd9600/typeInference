@@ -37,9 +37,14 @@ BlockEnd: make Token [
 ; general
 ; ####################
 
-Word: make Token [
-    _type: append self/_type "BlockEnd"
-    value: "]"
+WordToken: make Token [
+    _type: append self/_type "Word"
+    value: none
+]
+
+Wildcard: make Token [
+    _type: append self/_type "Wildcard"
+    value: "_"
 ]
 
 ; ##########

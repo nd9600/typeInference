@@ -18,9 +18,55 @@ parser: context [
 
     tokenize: function [
         "tokenizes a block! of code into a flat block! of tokens"
-        code [block!]
+        codeBlock [block!]
         return [block!] ;"a flat list of Tokens"
     ] [
-        none
+        tokens: copy []
+
+        appendToken: func [
+            tokenToAppend [object!]
+        ] [
+            append tokens tokenToAppend
+        ]
+
+        ; ##########
+        ; PARSE rules
+        ; ##########
+
+        blockPatterns: [
+            some [
+                    '_cons (appendToken ListCons)
+                |
+                    set w word! (appendToken make WordToken [value: w])
+            ]
+        ]
+        
+        pattern: [
+            '| (appendToken VerticalBar)
+            [
+                    set b block! (
+                        appendToken BlockStart
+                        if not empty? b [parse b blockPatterns]
+                        appendToken BlockEnd
+                    )
+                |
+                    '_ (appendToken Wildcard)
+            ]
+            '-> (appendToken Arrow)
+            copy data to ['| | end] (appendToken make Code [value: data])
+        ]
+
+        rules: [
+            some [
+                pattern
+            ]
+        ]
+
+        parse codeBlock rules
+        ; prettyPrint f_map lambda [last ?/_type] tokens
+        ; prettyPrint f_map lambda [?/value] tokens
+        ; quit
+
+        tokens
     ]
 ]
