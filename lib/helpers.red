@@ -28,6 +28,15 @@ isOneOf: make op! function [
     contains? s e
 ]
 
+cons: make op! function [
+    "inserts 'e at the head of 's, returns new 's"
+    e [any-type!] 
+    s [series!]
+] [
+    insert head s e 
+    s
+]
+
 startsWith: function [
     "returns whether 'series starts with 'value"
     series [series!]
