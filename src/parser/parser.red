@@ -15,4 +15,12 @@ parser: context [
         self/ast: none
         self/ast
     ]
+
+    tokenize: function [
+        "tokenizes a block! of code into a flat block! of tokens"
+        code [block!]
+        return [block!] ;"a flat list of Tokens"
+    ] [
+        none
+    ]
 ]

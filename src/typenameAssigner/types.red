@@ -1,6 +1,5 @@
 Red [
     Title: "Types needed when assigning typenames"
-
 ]
 
 Type: make Obj [

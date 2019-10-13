@@ -16,7 +16,6 @@ do %lib/obj.red
 moduleLoader: context load %lib/moduleLoader.red
 
 do %src/typenameAssigner/types.red
-do %src/typeConstraintGenerator/typeEquations.red
 unifier: moduleLoader/import %src/unifier/unifier.red
 
 tests: context [
